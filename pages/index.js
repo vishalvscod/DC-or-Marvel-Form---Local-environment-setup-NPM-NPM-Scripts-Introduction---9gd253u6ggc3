@@ -9,6 +9,23 @@ const App = () => {
   const [formData, setFormData] = useState({});
   const [age, setAge] = useState('');
 
+  function onSubmit(data){
+   
+    setFormData(data);
+    console.log(data)
+  }
+  function resetForm(){
+    setStep(1);
+    setFormData({});
+    setAge('')
+  }
+  useEffect(()=>{
+    if (formData.show) {
+      console.log(formData);
+      setStep(4);
+    }
+  },[formData])
+
   return (
     <div>
       {(step === 1 || !age) && (
@@ -16,7 +33,7 @@ const App = () => {
           <h1>Step 1: Select Form Type and Enter Age</h1>
           <label>
             Enter your age:
-            <input value={age} />
+            <input type="number" value={age} onChange={(e)=> setAge(e.target.value)}/>
           </label>
           <br />
           <label>
@@ -32,12 +49,12 @@ const App = () => {
       )}
       {step === 2 && (
         <div>
-          <FormA age={age} />
+          <FormA age={age} onSubmit={onSubmit} />
         </div>
       )}
       {step === 3 && (
         <div>
-          <FormB age={age} />
+          <FormB age={age} onSubmit={onSubmit}/>
         </div>
       )}
       {(step === 2 || step === 3) && age ? (
@@ -48,8 +65,8 @@ const App = () => {
 
       {step === 4 && (
         <div>
-          <Summary />
-          <button id='start-over'>Start Over</button>
+          <Summary formData={formData}/>
+          <button id='start-over' onClick={resetForm}>Start Over</button>
         </div>
       )}
     </div>
